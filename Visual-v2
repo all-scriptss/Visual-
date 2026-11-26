@@ -1,0 +1,287 @@
+-- XT HUB VISUAL GUI
+-- RESPONSIVE MOBILE VERSION
+-- 40 SECONDS LOADING
+
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "XTHub"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local camera = workspace.CurrentCamera
+
+-- COLORS
+local white = Color3.fromRGB(240,238,250)
+local muted = Color3.fromRGB(140,135,160)
+local purple = Color3.fromRGB(125,75,255)
+
+local function corner(obj, radius)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0,radius)
+    c.Parent = obj
+end
+
+local function label(parent,txt,pos,size,color,fontSize)
+    local obj = Instance.new("TextLabel")
+    obj.BackgroundTransparency = 1
+    obj.Position = pos
+    obj.Size = size
+    obj.Text = txt
+    obj.TextColor3 = color
+    obj.TextSize = fontSize
+    obj.Font = Enum.Font.Gotham
+    obj.TextXAlignment = Enum.TextXAlignment.Left
+    obj.Parent = parent
+    return obj
+end
+
+-- MAIN GUI
+local main = Instance.new("Frame")
+main.Size = UDim2.fromOffset(620,510)
+main.Position = UDim2.fromScale(0.5,0.5)
+main.AnchorPoint = Vector2.new(0.5,0.5)
+main.BackgroundColor3 = Color3.fromRGB(8,7,13)
+main.BackgroundTransparency = 0.04
+main.BorderSizePixel = 0
+main.Parent = gui
+
+corner(main,18)
+
+local outline = Instance.new("UIStroke")
+outline.Color = Color3.fromRGB(100,65,180)
+outline.Thickness = 1.3
+outline.Parent = main
+
+-- RESPONSIVE SCALING
+local scale = Instance.new("UIScale")
+scale.Parent = main
+
+local function updateScale()
+    camera = workspace.CurrentCamera
+    if not camera then return end
+
+    local viewport = camera.ViewportSize
+
+    local widthScale = (viewport.X * 0.90) / 620
+    local heightScale = (viewport.Y * 0.85) / 510
+
+    scale.Scale = math.min(widthScale,heightScale,1)
+end
+
+updateScale()
+
+camera:GetPropertyChangedSignal("ViewportSize"):Connect(updateScale)
+
+-- HEADER
+local title = label(main,
+    "Opening Anime Adventures",
+    UDim2.fromOffset(30,25),
+    UDim2.fromOffset(450,25),
+    white,15)
+
+label(main,
+    "XT HUB | V0.6.7",
+    UDim2.fromOffset(30,55),
+    UDim2.fromOffset(200,18),
+    muted,10)
+
+local minimize = Instance.new("TextButton")
+minimize.Size = UDim2.fromOffset(38,38)
+minimize.Position = UDim2.new(1,-55,0,18)
+minimize.Text = "−"
+minimize.TextSize = 22
+minimize.TextColor3 = white
+minimize.BackgroundColor3 = Color3.fromRGB(27,24,40)
+minimize.Parent = main
+corner(minimize,10)
+
+-- DIVIDER
+local divider = Instance.new("Frame")
+divider.Position = UDim2.fromOffset(0,90)
+divider.Size = UDim2.new(1,0,0,1)
+divider.BackgroundColor3 = Color3.fromRGB(60,50,85)
+divider.BorderSizePixel = 0
+divider.Parent = main
+
+-- PROGRESS
+label(main,
+    "LOADING PROGRESS",
+    UDim2.fromOffset(30,115),
+    UDim2.fromOffset(300,20),
+    muted,10)
+
+local bar = Instance.new("Frame")
+bar.Position = UDim2.fromOffset(30,150)
+bar.Size = UDim2.new(1,-60,0,12)
+bar.BackgroundColor3 = Color3.fromRGB(35,31,48)
+bar.BorderSizePixel = 0
+bar.Parent = main
+corner(bar,10)
+
+local fill = Instance.new("Frame")
+fill.Size = UDim2.new(0,0,1,0)
+fill.BackgroundColor3 = purple
+fill.BorderSizePixel = 0
+fill.Parent = bar
+corner(fill,10)
+
+local status = label(main,
+    "Initializing...",
+    UDim2.fromOffset(30,180),
+    UDim2.fromOffset(450,20),
+    muted,11)
+
+-- ACTIVITY
+label(main,
+    "ACTIVITY",
+    UDim2.fromOffset(30,220),
+    UDim2.fromOffset(200,20),
+    muted,10)
+
+local panel = Instance.new("Frame")
+panel.Position = UDim2.fromOffset(30,250)
+panel.Size = UDim2.new(1,-60,0,165)
+panel.BackgroundColor3 = Color3.fromRGB(17,15,25)
+panel.BackgroundTransparency = 0.1
+panel.BorderSizePixel = 0
+panel.Parent = main
+corner(panel,12)
+
+local panelStroke = Instance.new("UIStroke")
+panelStroke.Color = Color3.fromRGB(43,38,58)
+panelStroke.Parent = panel
+
+local logs = label(panel,
+    "[+] XT HUB loader initialized\n\n[+] Waiting for Character...\n\n[+] Character status: Ready\n\n[+] Preloading Assets...",
+    UDim2.fromOffset(15,12),
+    UDim2.new(1,-30,1,-24),
+    Color3.fromRGB(185,180,200),11)
+
+logs.Font = Enum.Font.Code
+logs.TextYAlignment = Enum.TextYAlignment.Top
+
+-- COMMUNITY
+label(main,
+    "XT HUB COMMUNITY",
+    UDim2.fromOffset(30,430),
+    UDim2.fromOffset(250,20),
+    muted,10)
+
+local link = Instance.new("TextBox")
+link.Position = UDim2.fromOffset(30,460)
+link.Size = UDim2.new(1,-145,0,40)
+link.BackgroundColor3 = Color3.fromRGB(24,21,35)
+link.Text = "https://discord.gg/YOUR-LINK"
+link.TextColor3 = muted
+link.TextSize = 10
+link.Font = Enum.Font.Gotham
+link.ClearTextOnFocus = false
+link.Parent = main
+corner(link,9)
+
+local copy = Instance.new("TextButton")
+copy.Position = UDim2.new(1,-105,0,460)
+copy.Size = UDim2.fromOffset(75,40)
+copy.BackgroundColor3 = Color3.fromRGB(85,48,165)
+copy.Text = "COPY"
+copy.TextColor3 = white
+copy.TextSize = 11
+copy.Font = Enum.Font.GothamBold
+copy.Parent = main
+corner(copy,9)
+
+copy.MouseButton1Click:Connect(function()
+    link:CaptureFocus()
+    link.CursorPosition = #link.Text + 1
+    copy.Text = "SELECT"
+end)
+
+-- MINIMIZE
+local minimized = false
+
+minimize.MouseButton1Click:Connect(function()
+    minimized = not minimized
+
+    for _,obj in ipairs(main:GetChildren()) do
+        if obj:IsA("GuiObject") and obj ~= minimize then
+            obj.Visible = not minimized
+        end
+    end
+
+    main.Size = minimized
+        and UDim2.fromOffset(620,75)
+        or UDim2.fromOffset(620,510)
+
+    minimize.Text = minimized and "+" or "−"
+end)
+
+-- 40 SECOND LOADING
+task.spawn(function()
+    for i = 1,100 do
+        if not gui.Parent then return end
+
+        fill.Size = UDim2.new(i/100,0,1,0)
+        status.Text = "Preloading Assets... "..i.."%"
+
+        task.wait(0.4)
+    end
+
+    status.Text = "Visual interface ready!"
+
+    logs.Text =
+        "[+] XT HUB loader initialized\n\n" ..
+        "[+] Character status: Ready\n\n" ..
+        "[+] Assets loaded\n\n" ..
+        "[+] Visual interface ready!"
+end)
+
+-- MOBILE AND PC DRAGGING
+local dragging = false
+local dragStart
+local startPos
+
+local dragArea = Instance.new("Frame")
+dragArea.Position = UDim2.fromOffset(0,0)
+dragArea.Size = UDim2.new(1,-65,0,90)
+dragArea.BackgroundTransparency = 1
+dragArea.Parent = main
+
+dragArea.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPos = main.Position
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging then
+        if input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch then
+
+            local delta = input.Position - dragStart
+
+            main.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+print("XT HUB Visual Interface Loaded")
